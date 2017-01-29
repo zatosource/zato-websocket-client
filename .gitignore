@@ -1,0 +1,9 @@
+*.egg-info*
+*.geany*
+*.pyc
+*.pyo
+*.so
+*.*~
+~
+.coverage
+zato-websocket-client-env
