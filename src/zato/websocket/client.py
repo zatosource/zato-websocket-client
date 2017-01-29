@@ -15,13 +15,15 @@ patch_all()
 import logging
 import subprocess
 from datetime import datetime, timedelta
-from httplib import OK
 from json import dumps, loads
 from traceback import format_exc
 from uuid import uuid4
 
 # gevent
 from gevent import sleep, spawn
+
+# six
+from six.moves.http_client import OK
 
 # ws4py
 from ws4py.client.geventclient import WebSocketClient
@@ -203,7 +205,7 @@ class _WSClient(WebSocketClient):
 
 # ################################################################################################################################
 
-class WSZatoClient(object):
+class Client(object):
     """ A WebSocket client that knows how to invoke Zato services.
     """
     def __init__(self, config):
@@ -360,7 +362,7 @@ if __name__ == '__main__':
 
         try:
             return subprocess.check_output(msg.data['cmd'])
-        except Exception, e:
+        except Exception as e:
             return format_exc(e)
 
     config = Config()
@@ -374,7 +376,7 @@ if __name__ == '__main__':
     config.secret = 'secret1'
     config.on_request_callback = on_request_from_zato
 
-    client = WSZatoClient(config)
+    client = Client(config)
     client.run()
 
     # This will take around 0.1s

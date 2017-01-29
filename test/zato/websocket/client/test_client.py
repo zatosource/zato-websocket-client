@@ -15,8 +15,10 @@ Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 from unittest import TestCase
 
 # Zato
-from zato.websocket.client import ABC
+from zato.websocket.client import Client
+
+Client = Client
 
 class TestClient(TestCase):
     def test_init(self):
-        pass
+        self.assertTrue(True)

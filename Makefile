@@ -6,7 +6,7 @@ BIN_DIR=$(CURDIR)/$(ENV_NAME)/bin
 
 default: test
 
-# In case of any errors with virtualenv make sure you have virtualenv==12.0 installed (that exact one).
+# In case of any errors with virtualenv on Ubuntu 14.04 make sure you have virtualenv==12.0 installed (that exact one).
 
 install2:
 	virtualenv -p python $(CURDIR)/$(ENV_NAME)
@@ -41,5 +41,5 @@ _test:
 	$(MAKE) flake8
 
 flake8:
-	$(BIN_DIR)/flake8 $(CURDIR)/src --count
-	$(BIN_DIR)/flake8 $(CURDIR)/test --count
+	$(BIN_DIR)/pyflakes $(CURDIR)/src
+	$(BIN_DIR)/pyflakes $(CURDIR)/test
