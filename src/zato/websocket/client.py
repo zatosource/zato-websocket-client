@@ -211,7 +211,7 @@ class Client(object):
         self.config = config
         self.conn = _WSClient(self.on_connected, self.on_message, self.on_error, self.config.address)
         self.keep_running = True
-        self.is_authenticated = False if self.config.needs_auth else True
+        self.is_authenticated = False
         self.auth_token = None
         self.on_request_callback = self.config.on_request_callback
 
@@ -280,22 +280,20 @@ class Client(object):
             'as `{}`'.format(self.config.username) if self.config.username else 'without credentials',
             self.config.client_name, self.config.client_id)
 
-        if self.config.needs_auth:
+        request_id = MSG_PREFIX.SEND_AUTH.format(uuid4().hex)
+        self.authenticate(request_id)
 
-            request_id = MSG_PREFIX.SEND_AUTH.format(uuid4().hex)
-            self.authenticate(request_id)
+        response = self._wait_for_response(request_id)
 
-            response = self._wait_for_response(request_id)
+        if not response:
+            logger.warn('No response to authentication request `%s`', request_id)
+        else:
+            self.auth_token = response.data['token']
+            self.is_authenticated = True
+            del self.responses_received[request_id]
 
-            if not response:
-                logger.warn('No response to authentication request `%s`', request_id)
-            else:
-                self.auth_token = response.data['token']
-                self.is_authenticated = True
-                del self.responses_received[request_id]
-
-                logger.info('Authenticated successfully as `%s` (%s %s)',
-                    self.config.username, self.config.client_name, self.config.client_id)
+            logger.info('Authenticated successfully as `%s` (%s %s)',
+                self.config.username, self.config.client_name, self.config.client_id)
 
 # ################################################################################################################################
 
@@ -375,7 +373,6 @@ if __name__ == '__main__':
     address = 'ws://127.0.0.1:47043/zato.ws.apitests'
 
     config.address = address
-    config.needs_auth = True
     config.username = 'user1'
     config.secret = 'secret1'
     config.on_request_callback = on_request_from_zato
@@ -383,7 +380,8 @@ if __name__ == '__main__':
     client = Client(config)
     client.run()
 
-    sleep(0.15)
+    while not client.is_authenticated:
+        sleep(0.01)
 
     client.invoke({'service':'zato.ping'})
 
