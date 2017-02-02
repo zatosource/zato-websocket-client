@@ -73,9 +73,7 @@ class MessageToZato(object):
 
     def serialize(self, _now=datetime.utcnow):
         return dumps(self.enrich({
-            'data': {
-                'input': {}
-            },
+            'data': {},
             'meta': {
                 'action': self.action,
                 'id': self.msg_id,
@@ -115,7 +113,7 @@ class ServiceInvokeRequest(MessageToZato):
         super(ServiceInvokeRequest, self).__init__(request_id, *args, **kwargs)
 
     def enrich(self, msg):
-        msg['data']['input'].update(self.data)
+        msg['data'].update(self.data)
         return msg
 
 # ################################################################################################################################
@@ -377,9 +375,9 @@ if __name__ == '__main__':
     address = 'ws://127.0.0.1:47043/zato.ws.apitests'
 
     config.address = address
-    config.needs_auth = False
-    #config.username = 'user1'
-    #config.secret = 'secret1'
+    config.needs_auth = True
+    config.username = 'user1'
+    config.secret = 'secret1'
     config.on_request_callback = on_request_from_zato
 
     client = Client(config)
