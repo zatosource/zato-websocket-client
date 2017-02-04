@@ -31,7 +31,7 @@ setup(
       author = 'Zato Source s.r.o.',
       author_email = 'info@zato.io',
       url = 'https://zato.io/docs',
-      description = 'Convenience Python client for WebSocket-based Zato services',
+      description = 'A convenience WebSocket Python client for Zato services',
       long_description = LONG_DESCRIPTION,
       platforms = ['OS Independent'],
       license = 'GNU Lesser General Public License v3 (LGPLv3)',
