@@ -179,7 +179,7 @@ class ResponseToZato(MessageToZato):
 
     def enrich(self, msg):
         msg['meta']['in_reply_to'] = self.in_reply_to
-        msg['data']['input']['response'] = self.data
+        msg['data']['response'] = self.data
         return msg
 
 # ################################################################################################################################
