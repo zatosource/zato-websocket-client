@@ -358,9 +358,6 @@ class Client(object):
 if __name__ == '__main__':
 
     def on_request_from_zato(msg):
-        if msg.data == zato_keep_alive_ping:
-            return 'client-pong'
-
         try:
             return subprocess.check_output(msg.data['cmd'])
         except Exception as e:
