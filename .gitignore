@@ -6,4 +6,6 @@
 *.*~
 ~
 .coverage
+build
+dist
 zato-websocket-client-env
