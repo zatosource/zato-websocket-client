@@ -17,7 +17,7 @@ install3:
 	$(MAKE) _install
 
 _install:
-	$(BIN_DIR)/pip install -r $(CURDIR)/requirements.txt
+	$(BIN_DIR)/pip install --upgrade -r $(CURDIR)/requirements.txt
 	$(BIN_DIR)/python $(CURDIR)/setup.py develop
 	$(BIN_DIR)/pip install -e $(CURDIR)/.
 
@@ -43,3 +43,9 @@ _test:
 flake8:
 	$(BIN_DIR)/pyflakes $(CURDIR)/src
 	$(BIN_DIR)/pyflakes $(CURDIR)/test
+
+pypi:
+	$(MAKE) clean
+	$(MAKE) default
+	$(BIN_DIR)/python $(CURDIR)/setup.py sdist bdist_wheel
+	$(BIN_DIR)/twine upload $(CURDIR)/dist/zato*
