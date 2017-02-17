@@ -329,13 +329,23 @@ class Client(object):
 
 # ################################################################################################################################
 
-    def run(self):
+    def run(self, max_wait=2):
         spawn(self._run)
+
+        now = datetime.utcnow()
+        until = now + timedelta(seconds=max_wait)
+
+        while not self.is_authenticated:
+            sleep(0.01)
+            now = datetime.utcnow()
+            if now >= until:
+                return
 
 # ################################################################################################################################
 
     def stop(self):
         self.keep_running = False
+        self.conn.close()
 
 # ################################################################################################################################
 
@@ -376,10 +386,6 @@ if __name__ == '__main__':
 
     client = Client(config)
     client.run()
-
-    while not client.is_authenticated:
-        sleep(0.01)
-
     client.invoke({'service':'zato.ping'})
 
     logger.info('Press Ctrl-C to quit')
