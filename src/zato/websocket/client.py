@@ -94,7 +94,7 @@ class MessageToZato(object):
 class AuthRequest(MessageToZato):
     """ Logs a client into a WebSocket connection.
     """
-    action = 'authenticate'
+    action = 'create-session'
 
     def enrich(self, msg):
         msg['meta']['username'] = self.config.username
@@ -140,7 +140,7 @@ class ResponseFromZato(object):
         response.in_reply_to = meta['in_reply_to']
         response.status = meta['status']
         response.is_ok = response.status == OK
-        response.data = msg['data']
+        response.data = msg.data('data')
 
         return response
 
