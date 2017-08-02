@@ -121,7 +121,7 @@ class ServiceInvokeRequest(MessageToZato):
 class ResponseFromZato(object):
     """ A response from Zato to a previous request by this client.
     """
-    __slots__ = ('id', 'timestamp', 'in_reply_to', 'status', 'is_ok', 'data')
+    __slots__ = ('id', 'timestamp', 'in_reply_to', 'status', 'is_ok', 'data', 'msg_impl')
 
     def __init__(self):
         self.id = None
@@ -130,10 +130,12 @@ class ResponseFromZato(object):
         self.status = None
         self.is_ok = None
         self.data = None
+        self.msg_impl = None
 
     @staticmethod
     def from_json(msg):
         response = ResponseFromZato()
+        response.msg_impl = msg
         meta = msg['meta']
         response.id = meta['id']
         response.timestamp = meta['timestamp']
@@ -149,16 +151,18 @@ class ResponseFromZato(object):
 class RequestFromZato(object):
     """ A request from Zato to this client.
     """
-    __slots__ = ('id', 'timestamp', 'data')
+    __slots__ = ('id', 'timestamp', 'data', 'msg_impl')
 
     def __init__(self):
         self.id = None
         self.timestamp = None
         self.data = None
+        self.msg_impl = None
 
     @staticmethod
     def from_json(msg):
         request = RequestFromZato()
+        request.msg_impl = msg
         request.id = msg['meta']['id']
         request.timestamp = msg['meta']['timestamp']
         request.data = msg['data']
