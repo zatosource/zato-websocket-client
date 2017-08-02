@@ -142,7 +142,7 @@ class ResponseFromZato(object):
         response.in_reply_to = meta['in_reply_to']
         response.status = meta['status']
         response.is_ok = response.status == OK
-        response.data = msg.data('data')
+        response.data = msg.get('data')
 
         return response
 
